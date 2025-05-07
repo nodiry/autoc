@@ -10,12 +10,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { siteConfig } from "@/config/site";
 
 interface CreateCompanyModalProps {
   dealerId: string;
 }
 
-export default function CreateCompanyModal({ dealerId }: CreateCompanyModalProps) {
+export default function CreateCompanyModal({
+  dealerId,
+}: CreateCompanyModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
@@ -44,8 +47,9 @@ export default function CreateCompanyModal({ dealerId }: CreateCompanyModalProps
     };
 
     try {
-      const res = await fetch("/org/create", {
+      const res = await fetch(siteConfig.links.org, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
@@ -54,6 +58,7 @@ export default function CreateCompanyModal({ dealerId }: CreateCompanyModalProps
 
       const data = await res.json();
       localStorage.setItem("org", JSON.stringify(data.company));
+      localStorage.setItem("user", JSON.stringify(data.user));
       toast.success("Company created");
       setIsOpen(false);
       setHasOrg(true);

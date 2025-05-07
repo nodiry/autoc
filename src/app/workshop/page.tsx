@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import Footer from "@/components/shared/Footer";
-import DealerNavBar from "./DealerNavBar";
+import DealerNavBar from "./components/DealerNavBar";
+import { siteConfig } from "@/config/site";
+import RefreshButton from "./components/RefreshButton";
 
 const WorkShop = () => {
   const [cars, setCars] = useState<any[]>([]);
+  const [id, setId] = useState("");
   const [orders, setOrders] = useState<any[]>([]);
 
   useEffect(() => {
@@ -11,28 +14,23 @@ const WorkShop = () => {
       try {
         let storedCars = localStorage.getItem("cars");
         let storedOrders = localStorage.getItem("orders");
-
+        const user = JSON.parse(localStorage.getItem("user") || "");
+        setId(user.company);
         const org = JSON.parse(localStorage.getItem("org") || "null");
         if (!org) {
           console.warn("No company found in localStorage");
           return;
         }
 
-        if (!storedCars) {
-          const res = await fetch("/org/cars", { credentials: "include" });
+        if (!storedCars || !storedOrders) {
+          const res = await fetch(siteConfig.links.org + org._id, {
+            method: "GET",
+            credentials: "include",
+          });
           if (res.ok) {
             const data = await res.json();
-            storedCars = JSON.stringify(data);
-            localStorage.setItem("cars", storedCars);
-          }
-        }
-
-        if (!storedOrders) {
-          const res = await fetch("/org/history", { credentials: "include" });
-          if (res.ok) {
-            const data = await res.json();
-            storedOrders = JSON.stringify(data);
-            localStorage.setItem("orders", storedOrders);
+            localStorage.setItem("cars", JSON.stringify(data.cars));
+            localStorage.setItem("orders", JSON.stringify(data.orders));
           }
         }
 
@@ -51,6 +49,7 @@ const WorkShop = () => {
       <DealerNavBar />
       <div className="flex flex-col min-h-screen px-4 py-6">
         <h2 className="text-xl font-bold mb-4">Dealer Workshop</h2>
+        <RefreshButton id={id} />
         <div className="flex gap-8">
           <div className="w-1/2">
             <h3 className="font-semibold text-lg mb-2">Cars List</h3>

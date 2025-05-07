@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -41,30 +42,38 @@ const DealerAuth = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+
     const url =
       mode === "signin"
         ? siteConfig.links.authdealer + "signin"
         : siteConfig.links.authdealer + "signup";
 
     try {
-      const response = await fetch(url, {
-        method: "POST",
+      // Send POST request using axios
+      const response = await axios.post(url, form, {
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(form),
+        withCredentials: true, // if you're dealing with cookies/session
       });
 
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Something went wrong");
+      const data = response.data;
 
       if (mode === "signin") {
+        if (data.company)
+          localStorage.setItem("org", JSON.stringify(data.company));
         localStorage.setItem("user", JSON.stringify(data.user));
         navigate("/workshop");
       } else {
         window.location.reload();
       }
     } catch (err: any) {
-      setError(err.message || "Unknown error");
+      // Axios errors are slightly different from fetch
+      if (err.response) {
+        setError(err.response.data.message || "Server responded with error");
+      } else if (err.request) {
+        setError("No response from server");
+      } else {
+        setError(err.message || "Something went wrong");
+      }
     } finally {
       setIsLoading(false);
     }

@@ -1,13 +1,15 @@
-const site: string = "http://localhost:3065/";
+export const site: string = "http://localhost:3033/";
 export const siteConfig = {
   links: {
     signup: site + "auth/signup",
     signin: site + "auth/signin",
     logout: site + "auth/logout",
     authdealer: site + "auth/dealer/",
+    org: site + "org/",
     twoauth: site + "auth/twoauth",
     profile: site + "auth/user",
     dashboard: site + "dash/",
+    sales: site + "sales/",
   },
   uz: {
     last_modified: "Ohirgi o'zgarish vaqti: ",

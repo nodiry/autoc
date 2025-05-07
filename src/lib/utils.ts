@@ -12,6 +12,7 @@ export const logout = async () => {
       method: "POST",
       credentials: "include",
     });
+    localStorage.clear();
     window.location.href = "/";
   } catch (err) {
     console.error("Logout failed:", err);

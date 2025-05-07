@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { siteConfig } from "@/config/site";
 
 interface UpdateCompanyModalProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export default function UpdateCompanyModal({
   const [loading, setLoading] = useState(false);
   const [company, setCompany] = useState<any>(null);
   const [form, setForm] = useState({
+    _id: "",
     name: "",
     address: "",
     email: "",
@@ -38,6 +40,7 @@ export default function UpdateCompanyModal({
     const parsed = JSON.parse(org);
     setCompany(parsed);
     setForm({
+      _id: parsed._id || "",
       name: parsed.name || "",
       address: parsed.address || "",
       email: parsed.email || "",
@@ -70,8 +73,9 @@ export default function UpdateCompanyModal({
     };
 
     try {
-      const res = await fetch("/org/update", {
+      const res = await fetch(siteConfig.links.org + form._id, {
         method: "PUT",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updated),
       });

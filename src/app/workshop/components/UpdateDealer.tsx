@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { siteConfig } from "@/config/site";
 
 interface Dealer {
   _id: string;
@@ -45,7 +46,7 @@ export default function UpdateDealerProfileModal({
   const [form, setForm] = useState({
     firstname: "",
     lastname: "",
-    age: "",
+    age: 18,
     address: "",
     phone: "",
     email: "",
@@ -59,7 +60,7 @@ export default function UpdateDealerProfileModal({
       setForm({
         firstname: dealer.firstname,
         lastname: dealer.lastname,
-        age: dealer.age || "18",
+        age: dealer.age || 18,
         address: dealer.address,
         phone: dealer.phone,
         email: dealer.email,
@@ -82,7 +83,6 @@ export default function UpdateDealerProfileModal({
 
     const payload = {
       ...form,
-      age: parseInt(form.age),
       settings: {
         chatEnabled: form.chatEnabled,
         visible: form.visible,
@@ -90,8 +90,9 @@ export default function UpdateDealerProfileModal({
     };
 
     try {
-      const res = await fetch(`/dealer/${dealer._id}/update`, {
+      const res = await fetch(siteConfig.links.org + "dealer", {
         method: "PUT",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
