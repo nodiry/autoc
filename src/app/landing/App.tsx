@@ -1,7 +1,6 @@
 // File: src/pages/LandingPage.tsx
 import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import Navbar from "@/components/shared/NavBar";
 import HeroSection from "@/components/shared/HeroSection";
 import Features from "@/components/shared/Features";
 import FeaturedCars from "@/components/shared/FeaturedCars";
@@ -9,6 +8,9 @@ import HowItWorks from "@/components/shared/HowItWorks";
 import Testimonials from "@/components/shared/Testimonials";
 import CallToAction from "@/components/shared/CallToAction";
 import Footer from "@/components/shared/Footer";
+import SignedNavBar from "@/components/shared/SignedNavBar";
+import NavBar from "@/components/shared/NavBar";
+import DealersMap from "@/components/Map";
 
 const LandingPage = () => {
   const { scrollYProgress } = useScroll();
@@ -19,10 +21,10 @@ const LandingPage = () => {
     // Simulate page load animation
     setIsLoaded(true);
   }, []);
-
+  const user = localStorage.getItem("user");
   return (
     <div className="bg-white min-h-screen">
-      <Navbar />
+      {user ? <SignedNavBar /> : <NavBar />}
 
       {/* Loading animation */}
       {!isLoaded && (
@@ -45,6 +47,7 @@ const LandingPage = () => {
         <FeaturedCars />
         <HowItWorks />
         <Testimonials />
+        <DealersMap />
         <CallToAction />
         <Footer />
 

@@ -53,7 +53,7 @@ const SignIn = () => {
       if (!response.ok) throw new Error(data.message || "Something went wrong");
 
       localStorage.setItem("user", JSON.stringify(data.user));
-      navigate("/dashboard");
+      navigate("/cars");
     } catch (error) {
       setError(
         error instanceof Error ? error.message : "An unknown error occurred"

@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./app/landing/App";
-import Dashboard from "./app/dashboard/Dashboard";
 import AboutPage from "./app/about/page";
 import UnAvailable from "./errors/404";
 import { ThemeProvider } from "./components/theme-provider";
@@ -15,6 +14,10 @@ import { Toaster } from "./components/ui/sonner";
 import PrivacyPolicy from "./app/privacy/page";
 import Dealer from "./app/auth/Dealer";
 import WorkShop from "./app/workshop/page";
+import FavoritesPage from "./app/favorites/favorite";
+import CarPage from "./app/cars/CarPage";
+import UserProfile from "./app/profile/page";
+import HistoryPage from "./app/history/page";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -25,12 +28,15 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/auth/signin" element={<SignIn />} />
           <Route path="/auth/signup" element={<SignUp />} />
           <Route path="/auth/dealer" element={<Dealer />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
+          <Route path="/history" element={<HistoryPage />} />
+          <Route path="/profile" element={<UserProfile />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/workshop" element={<WorkShop />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/cars" element={<CarListings />} />
+          <Route path="/cars/:id" element={<CarPage />} />
           <Route path="*" element={<UnAvailable />} /> {/* Catch-all route */}
         </Routes>
       </Router>

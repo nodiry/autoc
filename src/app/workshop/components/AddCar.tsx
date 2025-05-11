@@ -20,7 +20,6 @@ import {
   bodyTypes,
   driveTypes,
   engineSizes,
-  engineCylinders,
 } from "@/lib/carOptions";
 import {
   Select,
@@ -52,14 +51,18 @@ export default function AddCarModal({
     carmodel: "",
     year: "",
     price: "",
-    vin:"",
+    vin: "",
     specs: {
       color: "",
       transmission: "",
       fuelType: "",
       bodyType: "",
       driveType: "",
-      engineSize: "",
+      engine: {
+        size: "",
+        cylinders: 0,
+        horsepower: 0,
+      },
       engineCylinders: "",
       fuelEfficiency: "",
     },
@@ -67,15 +70,19 @@ export default function AddCarModal({
   });
 
   const handleChange = (field: string, value: any) => {
-    console.log(company)
-    if (field in form.specs) {
-      setForm((prev) => ({
-        ...prev,
-        specs: { ...prev.specs, [field]: value },
-      }));
-    } else {
-      setForm((prev) => ({ ...prev, [field]: value }));
-    }
+    const keys = field.split(".");
+    setForm((prevForm) => {
+      const newForm = { ...prevForm };
+      let current: any = newForm;
+
+      while (keys.length > 1) {
+        const key = keys.shift()!;
+        if (!(key in current)) current[key] = {};
+        current = current[key];
+      }
+      current[keys[0]] = value;
+      return newForm;
+    });
   };
 
   const handleSubmit = async () => {
@@ -115,12 +122,16 @@ export default function AddCarModal({
     }
   };
 
+  const getNestedValue = (obj: any, path: string) => {
+    return path.split(".").reduce((acc, key) => (acc ? acc[key] : ""), obj);
+  };
+
   const renderSelect = (label: string, field: string, options: string[]) => (
     <div>
       <Label>{label}</Label>
       <Select
-        onValueChange={(val) => handleChange(field, val)}
-        value={(form.specs as any)[field] || ""}
+        onValueChange={(val) => handleChange(`specs.${field}`, val)}
+        value={getNestedValue(form, `specs.${field}`) || ""}
       >
         <SelectTrigger>
           <SelectValue placeholder={`Select ${label}`} />
@@ -194,16 +205,41 @@ export default function AddCarModal({
             {renderSelect("Fuel Type", "fuelType", fuelTypes)}
             {renderSelect("Body Type", "bodyType", bodyTypes)}
             {renderSelect("Drive Type", "driveType", driveTypes)}
-            {renderSelect("Engine Size", "engineSize", engineSizes)}
-            {renderSelect(
-              "Engine Cylinders",
-              "engineCylinders",
-              engineCylinders
-            )}
+            <Label>Engine Size</Label>
+            <Select
+              onValueChange={(val) => handleChange("specs.engine.size", val)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Engine Size" />
+              </SelectTrigger>
+              <SelectContent>
+                {engineSizes.map((item) => (
+                  <SelectItem key={item} value={item}>
+                    {item}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Input
+              type="number"
+              placeholder=" Engine Cylinders"
+              value={form.specs.engine.cylinders}
+              onChange={(e) =>
+                handleChange("specs.engine.cylinders", e.target.value)
+              }
+            />
+            <Input
+              type="number"
+              placeholder=" Horse Power"
+              value={form.specs.engine.horsepower}
+              onChange={(e) =>
+                handleChange("specs.engine.horsepower", e.target.value)
+              }
+            />
             <Input
               placeholder="Fuel Efficiency (e.g. 18 km/l or 500 km)"
               value={form.specs.fuelEfficiency}
-              onChange={(e) => handleChange("fuelEfficiency", e.target.value)}
+              onChange={(e) => handleChange("specs.fuelEfficiency", e.target.value)}
             />
           </div>
         </div>
