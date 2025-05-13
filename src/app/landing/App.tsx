@@ -11,11 +11,18 @@ import Footer from "@/components/shared/Footer";
 import SignedNavBar from "@/components/shared/SignedNavBar";
 import NavBar from "@/components/shared/NavBar";
 import DealersMap from "@/components/Map";
+import AISearchInput from "@/components/aisearch";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
   const { scrollYProgress } = useScroll();
+  const navigate = useNavigate();
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  const handleAISearch = (query: string) => {
+    navigate(`/cars?query=${encodeURIComponent(query)}`);
+  };
 
   useEffect(() => {
     // Simulate page load animation
@@ -43,6 +50,11 @@ const LandingPage = () => {
         transition={{ duration: 0.5 }}
       >
         <HeroSection />
+
+        <section className="px-6 py-12">
+          <h1 className="text-3xl mb-4">Find Your Dream Car with AI</h1>
+          <AISearchInput onSubmit={handleAISearch} />
+        </section>
         <Features />
         <FeaturedCars />
         <HowItWorks />

@@ -12,7 +12,7 @@ const CarCard = ({ car, onClick }: CarCardProps) => {
   return (
     <Card
       onClick={onClick}
-      className="cursor-pointer hover:shadow-lg transition"
+      className="cursor-pointer hover:shadow-lg transition max-w-1xl"
     >
       <CardContent className="p-0">
         <AspectRatio ratio={10 / 8} className="bg-muted">

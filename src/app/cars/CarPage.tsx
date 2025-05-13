@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Car } from "@/type";
-import { siteConfig, site } from "@/config/site";
+import { site, siteConfig } from "@/config/site";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import FavoriteMarker from "./components/Favorite";
-import { useParams } from "react-router-dom";
 import BuyCarModal from "./components/BuyButton";
 import Navbar from "@/components/shared/NavBar";
 import SignedNavBar from "@/components/shared/SignedNavBar";
@@ -20,62 +20,73 @@ interface Company {
 }
 
 const CarPage = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [company, setCompany] = useState<Company | null>(null);
   const [cars, setCars] = useState<Car[]>([]);
   const [car, setCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(true);
-  const [signed, setsigned] = useState(false);
+  const [signed, setSigned] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [isBuyer, setBuyer] = useState(false);
+  const [isBuyer, setIsBuyer] = useState(false);
 
   const handleSuccess = (updatedCar: Car) => {
     setCar(updatedCar); // this updates the car info on page
   };
-  // First: load the car from localStorage
   useEffect(() => {
-    const storedCars: Car[] = JSON.parse(localStorage.getItem("cars") || "[]");
-    const foundCar = storedCars.find((c) => c._id === id);
-    setCar(foundCar || null);
-  }, [id]);
-
-  // Second: check if the user is signed in
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    if (user && Object.keys(user).length > 0) setsigned(true);
-  }, []);
-
-  // Third: once car and user are available, check if user is the buyer
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    if (car && user?._id) {
-      setBuyer(car.buyer === user._id);
-    }
-  }, [car]);
-
-  // Fourth: fetch the company info after the car is loaded
-  useEffect(() => {
-    if (!car?.company) return;
-
-    const fetchCompany = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch(siteConfig.links.org + car.company, {
+        // Get user from localStorage
+        const storedUser = localStorage.getItem("user");
+        const user = storedUser ? JSON.parse(storedUser) : null;
+
+        if (user && typeof user === "object" && Object.keys(user).length > 0) {
+          setSigned(true);
+        }
+
+        // Fetch car data
+        const carRes = await fetch(`${siteConfig.links.dashboard}cars/${id}`, {
           method: "GET",
           credentials: "include",
         });
-        const data = await res.json();
-        setCompany(data.company);
-        setCars(data.cars);
-      } catch (err) {
-        console.error("Failed to fetch company info", err);
+
+        if (!carRes.ok) throw new Error("Failed to fetch car");
+
+        const carData = await carRes.json();
+        const loadedCar: Car = carData.car;
+        setCar(loadedCar);
+
+        // Check if user is the buyer
+        if (user && user._id && loadedCar.buyer === user._id) {
+          setIsBuyer(true);
+        }
+
+        // Fetch company info if car has company
+        if (loadedCar.company) {
+          const companyRes = await fetch(
+            `${siteConfig.links.org}${loadedCar.company}`,
+            {
+              method: "GET",
+              credentials: "include",
+            }
+          );
+
+          if (!companyRes.ok) throw new Error("Failed to fetch company");
+
+          const companyData = await companyRes.json();
+          setCompany(companyData.company);
+          setCars(companyData.cars);
+        }
+      } catch (error) {
+        console.error("Error loading car page:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCompany();
-  }, [car?.company]);
+    fetchData();
+  }, [id]);
 
+  if (loading) return <div className="p-6 text-center">Loading...</div>;
   if (!car) return <div className="p-6 text-center">Car not found.</div>;
 
   return (

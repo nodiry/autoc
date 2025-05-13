@@ -33,6 +33,7 @@ const DealersMap = () => {
         });
         if (res.ok) {
           const data = await res.json();
+          console.log(data.dealers);
           setRegions(data.dealers);
         } else {
           console.error("Failed to fetch region data");

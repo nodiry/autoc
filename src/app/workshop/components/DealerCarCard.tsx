@@ -4,6 +4,7 @@ import { siteConfig, site } from "@/config/site";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from "date-fns";
+import { toast } from "sonner";
 
 interface Props {
   car: Car;
@@ -30,7 +31,7 @@ const DealerCarCard = ({ car, companyId }: Props) => {
           setBuyerName(data?.user?.firstname + data.user.lastname);
           setDealerName(data?.dealer?.firstname + data.dealer.lastname);
         } catch (err) {
-          console.error("error fetching names:", err);
+          toast.error("error fetching names:");
           setBuyerName("Unknown Buyer");
           setDealerName("Unknown Dealer");
         }

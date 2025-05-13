@@ -6,6 +6,7 @@ export const siteConfig = {
     logout: site + "auth/logout",
     user: site + "auth/user",
     authdealer: site + "auth/dealer/",
+    chat: site + "chat/",
     org: site + "org/",
     twoauth: site + "auth/twoauth",
     profile: site + "auth/me",
