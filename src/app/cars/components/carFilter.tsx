@@ -67,8 +67,8 @@ const CarFilter = ({
         (!maxYear || car.year <= parseInt(maxYear)) &&
         (!minPrice || car.price >= parseFloat(minPrice)) &&
         (!maxPrice || car.price <= parseFloat(maxPrice)) &&
-        (!minMileage || (car.specs.mileage ?? 0) >= parseInt(minMileage)) &&
-        (!maxMileage || (car.specs.mileage ?? 0) <= parseInt(maxMileage)) &&
+        (!minMileage || (car.specs.range ?? 0) >= parseInt(minMileage)) &&
+        (!maxMileage || (car.specs.range ?? 0) <= parseInt(maxMileage)) &&
         (!minHorsepower ||
           (car.specs.engine?.horsepower ?? 0) >= parseInt(minHorsepower)) &&
         (!maxHorsepower ||
@@ -188,7 +188,7 @@ const CarFilter = ({
       {[
         ["Year", "minYear", "maxYear"],
         ["Price", "minPrice", "maxPrice"],
-        ["Mileage", "minMileage", "maxMileage"],
+        ["Range", "minMileage", "maxMileage"],
         ["Horsepower", "minHorsepower", "maxHorsepower"],
       ].map(([label, minKey, maxKey]) => (
         <div key={minKey}>
@@ -198,14 +198,14 @@ const CarFilter = ({
               type="number"
               placeholder="Min"
               className="w-1/2 p-2 border rounded"
-              value={filters[minKey]}
+              value={filters[minKey as keyof typeof filters]}
               onChange={(e) => handleChange(minKey, e.target.value)}
             />
             <input
               type="number"
               placeholder="Max"
               className="w-1/2 p-2 border rounded"
-              value={filters[maxKey]}
+              value={filters[maxKey as keyof typeof filters]}
               onChange={(e) => handleChange(maxKey, e.target.value)}
             />
           </div>

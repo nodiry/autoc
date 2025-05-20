@@ -1,4 +1,4 @@
-export const site: string = "http://localhost:3033/";
+export const site: string = "https://api.avalanch.uz/";
 export const siteConfig = {
   links: {
     signup: site + "auth/signup",
