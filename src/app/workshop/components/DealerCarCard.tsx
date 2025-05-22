@@ -9,16 +9,17 @@ import { toast } from "sonner";
 interface Props {
   car: Car;
   companyId: string;
+  onOpenChat: (carId: string, buyerId: string) => void;
 }
 
-const DealerCarCard = ({ car, companyId }: Props) => {
+const DealerCarCard = ({ car, companyId, onOpenChat }: Props) => {
   const [buyerName, setBuyerName] = useState<string | null>(null);
   const [dealerName, setDealerName] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchBuyerDealer = async () => {
-      if (car.status === "pending" && car.buyer) {
+      if (car.status !== "available" && car.buyer) {
         try {
           const res = await fetch(siteConfig.links.user, {
             method: "POST",
@@ -88,10 +89,12 @@ const DealerCarCard = ({ car, companyId }: Props) => {
 
         {/* 3. Buyer + Dealer */}
         <div className="flex-1 min-w-0 space-y-1">
-          {car.status === "pending" && car.buyer ? (
+          {(car.status == "pending" || car.status == "completed") &&
+          car.buyer ? (
             <>
               <p className="text-sm truncate">
-                Buyer: <span className="font-medium">{buyerName}</span>
+                Buyer:{" "}
+                <span className="font-medium text-black">{buyerName}</span>
               </p>
               <p className="text-sm truncate">
                 Dealer: <span className="font-medium">{dealerName}</span>
@@ -101,6 +104,11 @@ const DealerCarCard = ({ car, companyId }: Props) => {
             <p className="text-sm text-muted-foreground italic">
               No buyer info
             </p>
+          )}
+          {["pending", "completed"].includes(car.status) && (
+            <Button onClick={() => onOpenChat(car._id, car.buyer || '')}>
+              Open Chat
+            </Button>
           )}
         </div>
 

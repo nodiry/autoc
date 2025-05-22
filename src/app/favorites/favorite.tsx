@@ -33,6 +33,7 @@ const FavoritesPage = () => {
       <div className="w-screen flex flex-col items-center">
         {signed ? <SignedNavBar /> : <Navbar />}
         <div className="flex flex-col items-center h-screen mt-16">
+                <h2 className="text-2xl font-bold mb-4 text-center">Favorite Cars</h2>
           No cars you have liked yet.
         </div>
         <Footer />
@@ -42,6 +43,7 @@ const FavoritesPage = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {signed ? <SignedNavBar /> : <Navbar />}
+      <h2 className="text-2xl font-bold mb-4 text-center">Favorite Cars</h2>
       <div className="flex-1 p-4">
         {isLoading ? (
           <p>Loading cars...</p>

@@ -27,7 +27,7 @@ export interface Car {
     kilometers?: number; // e.g., 100000
   };
   images: string[]; // Array of image URLs
-  status?: string;
+  status: string;
   buyer?: string;
   saleDate?: string;
   review?: {

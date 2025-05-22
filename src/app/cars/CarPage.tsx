@@ -55,13 +55,17 @@ const CarPage = () => {
 
         // Fetch company
         if (fetchedCar.company) {
-          const companyRes = await fetch(siteConfig.links.org + fetchedCar.company, {
-            method: "GET",
-            credentials: "include",
-          });
+          const companyRes = await fetch(
+            siteConfig.links.org + fetchedCar.company,
+            {
+              method: "GET",
+              credentials: "include",
+            }
+          );
           if (!companyRes.ok) throw new Error("Failed to fetch company");
 
-          const { company: fetchedCompany, cars: companyCars } = await companyRes.json();
+          const { company: fetchedCompany, cars: companyCars } =
+            await companyRes.json();
           setCompany(fetchedCompany);
           setCars(companyCars);
         }
@@ -78,12 +82,9 @@ const CarPage = () => {
   if (loading) return <div className="p-6 text-center">Loading...</div>;
   if (!car) return <div className="p-6 text-center">Car not found.</div>;
 
-  const chatEnabled =
-    car.status === "pending" && isBuyer ||
-    car.status === "completed" && isBuyer;
+  const chatEnabled = (car.status === "pending" && isBuyer) || (car.status === "completed" && isBuyer);
 
-  const showBuyButton =
-    car.status === "available" || (car.status === "rejected" && !isBuyer);
+  const showBuyButton =car.status === "available" || (car.status === "rejected" && !isBuyer);
 
   const buyButtonLabel = (() => {
     if (car.status === "available") return "Buy Now";
@@ -91,7 +92,7 @@ const CarPage = () => {
     if (car.status === "pending") return "Reserved";
     if (car.status === "completed" && isBuyer) return "Purchase Approved";
     if (car.status === "completed") return "Car Sold";
-    if (car.status === "rejected" && isBuyer) return "Purchase Denied";
+    if (car.status === "cancelled" && isBuyer) return "Purchase Denied";
     return "Buy Now";
   })();
 
@@ -151,10 +152,7 @@ const CarPage = () => {
             />
             <Button
               onClick={() => {
-                if (!user) {
-                  window.location.href = "/auth/signin";
-                  return;
-                }
+                if (!user) window.location.href = "/auth/signin";
                 setModalOpen(true);
               }}
               disabled={!showBuyButton}

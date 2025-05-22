@@ -57,12 +57,12 @@ export default function ChatBox({
     if (!chatEnabled) return;
 
     axios
-      .get(`${siteConfig.links.chat}${carId}/${userId}`, {
+      .get(siteConfig.links.chat + carId, {
         withCredentials: true,
       })
       .then((res) => setMessages(res.data))
       .catch(console.error);
-  }, [carId, userId, chatEnabled]);
+  }, [carId, chatEnabled]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -92,18 +92,25 @@ export default function ChatBox({
       </div>
 
       <div className="flex-1 overflow-y-auto px-3 py-2 space-y-2">
-        {messages.map((m, i) => (
-          <div
-            key={i}
-            className={`p-2 rounded-md max-w-[75%] break-words ${
-              m.sender === userId
-                ? "bg-blue-100 self-end ml-auto"
-                : "bg-gray-100"
-            }`}
-          >
-            {m.content}
-          </div>
-        ))}
+        {messages.map((m, i) => {
+            const time = new Date(m.createdAt || '').toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+            return (
+              <div
+                key={i}
+                className={`p-2 my-1 rounded-md max-w-[75%] flex flex-col text-sm ${
+                  m.sender === userId
+                    ? "bg-blue-500 text-white self-end ml-auto"
+                    : "bg-gray-200"
+                }`}
+              >
+                <span className="text-xs opacity-70 mb-1">{time}</span>
+                {m.content}
+              </div>
+            );
+          })}
         <div ref={bottomRef} />
       </div>
 

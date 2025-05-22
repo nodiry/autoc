@@ -49,10 +49,10 @@ const HistoryPage = () => {
   );
 
   return (
-    <div className="min-h-screen px-4 py-6 flex flex-col items-center">
+    <div className="min-h-screen flex flex-col items-center">
       {signed ? <SignedNavBar /> : <Navbar />}
-      <div className="w-full md:w-9/12">
-        <h2 className="text-2xl font-bold mb-4 text-center">
+      <div className="w-full md:w-9/12 h-screen">
+        <h2 className="text-2xl font-bold my-4 text-center">
           Purchase History
         </h2>
         {loading ? (

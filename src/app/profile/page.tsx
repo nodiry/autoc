@@ -6,6 +6,7 @@ import SignedNavBar from "@/components/shared/SignedNavBar";
 import Navbar from "@/components/shared/NavBar";
 import UpdateUserModal from "./components/updateUser";
 import TerminateAccountModal from "./components/TerminateModal";
+import Footer from "@/components/shared/Footer";
 
 interface User {
   username: string;
@@ -37,7 +38,7 @@ const UserProfile = () => {
   return (
     <div className="flex flex-col items-center ">
       {user ? <SignedNavBar /> : <Navbar />}
-      <Card className="w-full max-w-2xl shadow-md mt-20">
+      <Card className="w-full max-w-2xl shadow-md my-20">
         <CardContent className="p-6 space-y-4">
           <h2 className="text-2xl font-semibold">User Profile</h2>
           <Separator />
@@ -85,7 +86,8 @@ const UserProfile = () => {
               variant="destructive"
               onClick={() => setTerminateOpen(true)}
             >
-              Terminate Account </Button>
+              Terminate Account{" "}
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -99,6 +101,7 @@ const UserProfile = () => {
         onClose={() => setTerminateOpen(false)}
         username={user.username}
       />
+      <Footer />
     </div>
   );
 };

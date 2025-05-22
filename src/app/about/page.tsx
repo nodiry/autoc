@@ -34,7 +34,7 @@ const AboutPage = () => {
             transition={{ duration: 0.5 }}
             className="text-4xl font-bold text-white mb-4"
           >
-            About AutoBozor
+            Dream Auto
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -62,7 +62,7 @@ const AboutPage = () => {
                 Our Story
               </h2>
               <p className="text-lg text-gray-700 mb-4">
-                Founded in 2020, AutoBozor started with a simple mission: to
+                Founded in 2020, Dream Auto started with a simple mission: to
                 create a transparent and efficient marketplace for car buyers
                 and sellers in Uzbekistan.
               </p>
@@ -199,7 +199,7 @@ const AboutPage = () => {
               Our Leadership Team
             </h2>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-              Meet the people driving AutoBozor forward
+              Meet the people driving Dream Auto forward
             </p>
           </motion.div>
 
@@ -257,7 +257,7 @@ const AboutPage = () => {
             transition={{ duration: 0.5 }}
             className="text-3xl font-bold text-white mb-6"
           >
-            Join the AutoBozor Community
+            Join the Dream Auto Community
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
