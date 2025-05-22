@@ -220,7 +220,10 @@ export default function AddCarModal({
                 ))}
               </SelectContent>
             </Select>
+            <Label>Engine Cylinders</Label>
             <Input
+              min={0}
+              max={24}
               type="number"
               placeholder=" Engine Cylinders"
               value={form.specs.engine.cylinders}
@@ -228,7 +231,10 @@ export default function AddCarModal({
                 handleChange("specs.engine.cylinders", e.target.value)
               }
             />
+            <Label>Horse Power</Label>
             <Input
+              min={10}
+              max={1000}
               type="number"
               placeholder=" Horse Power"
               value={form.specs.engine.horsepower}
@@ -236,10 +242,16 @@ export default function AddCarModal({
                 handleChange("specs.engine.horsepower", e.target.value)
               }
             />
+            <Label>Fuel Efficiency</Label>
             <Input
+              min={0}
+              max={1200}
+              type="number"
               placeholder="Fuel Efficiency (e.g. 18 km/l or 500 km)"
               value={form.specs.fuelEfficiency}
-              onChange={(e) => handleChange("specs.fuelEfficiency", e.target.value)}
+              onChange={(e) =>
+                handleChange("specs.fuelEfficiency", e.target.value)
+              }
             />
           </div>
         </div>

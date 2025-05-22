@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
          DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import LangOption from "./LangOption";
-import { ModeToggle } from "./mode-toggle";
 
 const ProfileModal = () => {
   const navigate = useNavigate();
@@ -38,7 +37,6 @@ const logout = async () => {
           <LangOption/> 
           </DropdownMenuItem>
           <DropdownMenuItem >
-          <ModeToggle/>
           </DropdownMenuItem>
           <hr className="my-2" />
           <DropdownMenuItem variant="destructive" onClick={handleLogout}>

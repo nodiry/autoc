@@ -20,7 +20,6 @@ const CarListings = () => {
   const [filteredCars, setFilteredCars] = useState<Car[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [signed, setsigned] = useState(false);
-  const [aiMessage, setAiMessage] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const location = useLocation();
@@ -40,26 +39,10 @@ const CarListings = () => {
             { prompt: query },
             { withCredentials: true }
           );
-
-          const fullMessage =
-            res.data.message || res.data.answer?.message || "";
           setCars(res.data.cars);
           setFilteredCars(res.data.cars);
-
-          // Simulate streaming
-          let i = 0;
-          const streamInterval = setInterval(() => {
-            if (i <= fullMessage.length) {
-              setAiMessage(fullMessage.slice(0, i));
-              i++;
-            } else {
-              clearInterval(streamInterval);
-            }
-          }, 20); // adjust speed here
         } else {
-          const res = await axios.get(siteConfig.links.dashboard + "cars", {
-            withCredentials: true,
-          });
+          const res = await axios.get(siteConfig.links.dashboard + "cars", { withCredentials: true });
           localStorage.setItem("cars", JSON.stringify(res.data.cars));
           setCars(res.data.cars);
           setFilteredCars(res.data.cars);
@@ -89,19 +72,8 @@ const CarListings = () => {
         <div className="flex flex-col w-full">
           <div className="px-4 mt-4 max-w-4xl w-full mx-auto">
             <AISearchInput onSubmit={handleAISearch} loading={isLoading} />
-            {aiMessage && (
-              <div className="my-4 p-4 rounded bg-muted text-sm border">
-                <span className="whitespace-pre-wrap">{aiMessage}</span>
-              </div>
-            )}
             {query && (
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setAiMessage("");
-                  navigate("/cars");
-                }}
-              >
+              <Button variant="outline" onClick={() => navigate("/cars")}>
                 Clear AI Filter
               </Button>
             )}

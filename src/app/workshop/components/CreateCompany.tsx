@@ -11,10 +11,33 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { siteConfig } from "@/config/site";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface CreateCompanyModalProps {
   dealerId: string;
 }
+
+const regions = [
+  "Tashkent",
+  "Andijan",
+  "Fergana",
+  "Namangan",
+  "Samarkand",
+  "Bukhara",
+  "Khorezm",
+  "Kashkadarya",
+  "Surkhandarya",
+  "Jizzakh",
+  "Sirdaryo",
+  "Navoi",
+  "Karakalpakstan",
+];
 
 export default function CreateCompanyModal({
   dealerId,
@@ -70,7 +93,6 @@ export default function CreateCompanyModal({
     }
   };
 
-  // if user already has org, don’t show the button or modal
   if (hasOrg) return null;
 
   return (
@@ -109,11 +131,23 @@ export default function CreateCompanyModal({
               value={form.phone}
               onChange={(e) => handleChange("phone", e.target.value)}
             />
-            <Input
-              placeholder="Region"
+
+            {/* Select Region Dropdown */}
+            <Select
               value={form.region}
-              onChange={(e) => handleChange("region", e.target.value)}
-            />
+              onValueChange={(value) => handleChange("region", value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Region" />
+              </SelectTrigger>
+              <SelectContent>
+                {regions.map((region) => (
+                  <SelectItem key={region} value={region}>
+                    {region}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <DialogFooter>

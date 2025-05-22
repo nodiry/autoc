@@ -4,6 +4,7 @@ import DealerNavBar from "./components/DealerNavBar";
 import { siteConfig } from "@/config/site";
 import RefreshButton from "./components/RefreshButton";
 import DealerCarCard from "./components/DealerCarCard";
+import { toast } from "sonner";
 
 const WorkShop = () => {
   const [cars, setCars] = useState<any[]>([]);
@@ -12,7 +13,6 @@ const WorkShop = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let storedCars = localStorage.getItem("cars");
         const user = JSON.parse(localStorage.getItem("user") || "");
         setId(user.company);
         const org = JSON.parse(localStorage.getItem("org") || "null");
@@ -20,19 +20,14 @@ const WorkShop = () => {
           console.warn("No company found in localStorage");
           return;
         }
+        const res = await fetch(siteConfig.links.org + org._id, {
+          method: "GET",
+          credentials: "include",
+        });
+        if (!res.ok) toast.error("error happened while fetching cars");
+        const data = await res.json();
 
-        if (!storedCars) {
-          const res = await fetch(siteConfig.links.org + org._id, {
-            method: "GET",
-            credentials: "include",
-          });
-          if (res.ok) {
-            const data = await res.json();
-            localStorage.setItem("cars", JSON.stringify(data.cars));
-          }
-        }
-
-        setCars(JSON.parse(storedCars || "[]"));
+        setCars(data.cars);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

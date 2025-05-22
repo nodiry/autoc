@@ -1,6 +1,11 @@
 // components/BuyCarModal.tsx
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
 
@@ -8,10 +13,9 @@ interface BuyCarModalProps {
   open: boolean;
   onClose: () => void;
   carid: string;
-  onSuccess: (updatedCar: any) => void;
 }
 
-const BuyCarModal = ({ open, onClose, carid, onSuccess }: BuyCarModalProps) => {
+const BuyCarModal = ({ open, onClose, carid }: BuyCarModalProps) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -29,10 +33,8 @@ const BuyCarModal = ({ open, onClose, carid, onSuccess }: BuyCarModalProps) => {
       });
 
       if (!res.ok) throw new Error("Failed to checkout");
-
-      const updatedCar = await res.json();
-      onSuccess(updatedCar.car);
       onClose();
+      window.location.reload();
     } catch (err: any) {
       setError(err.message || "Something went wrong");
     } finally {

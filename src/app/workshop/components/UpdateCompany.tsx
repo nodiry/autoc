@@ -11,11 +11,34 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { siteConfig } from "@/config/site";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface UpdateCompanyModalProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
 }
+
+const regions = [
+  "Tashkent",
+  "Andijan",
+  "Fergana",
+  "Namangan",
+  "Samarkand",
+  "Bukhara",
+  "Khorezm",
+  "Kashkadarya",
+  "Surkhandarya",
+  "Jizzakh",
+  "Sirdaryo",
+  "Navoi",
+  "Karakalpakstan",
+];
 
 export default function UpdateCompanyModal({
   isOpen,
@@ -33,7 +56,6 @@ export default function UpdateCompanyModal({
     newDealer: "",
   });
 
-  // Load company data from localStorage
   useEffect(() => {
     const org = localStorage.getItem("org");
     if (!org) return;
@@ -66,7 +88,6 @@ export default function UpdateCompanyModal({
       email: form.email,
       phone: form.phone,
       region: form.region,
-      // push new dealer if any
       dealers: form.newDealer
         ? [...(company.dealers || []), form.newDealer]
         : company.dealers,
@@ -85,8 +106,6 @@ export default function UpdateCompanyModal({
       const data = await res.json();
       toast.success("Company updated successfully");
 
-      // update localStorage
-      localStorage.removeItem("org");
       localStorage.setItem("org", JSON.stringify(data.company));
       setIsOpen(false);
     } catch (err) {
@@ -125,16 +144,41 @@ export default function UpdateCompanyModal({
             value={form.phone}
             onChange={(e) => handleChange("phone", e.target.value)}
           />
-          <Input
-            placeholder="Region"
+
+          {/* Region Select */}
+          <Select
             value={form.region}
-            onChange={(e) => handleChange("region", e.target.value)}
-          />
+            onValueChange={(value) => handleChange("region", value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select Region" />
+            </SelectTrigger>
+            <SelectContent>
+              {regions.map((r) => (
+                <SelectItem key={r} value={r}>
+                  {r}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
           <Input
             placeholder="Add Dealer ID"
             value={form.newDealer}
             onChange={(e) => handleChange("newDealer", e.target.value)}
           />
+
+          {/* Show current dealers */}
+          {company?.dealers?.length > 0 && (
+            <div className="text-sm text-muted-foreground">
+              <p className="mb-1 font-semibold">Existing Dealers:</p>
+              <ul className="list-disc list-inside space-y-1">
+                {company.dealers.map((d: string, i: number) => (
+                  <li key={i}>{d}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         <DialogFooter>
