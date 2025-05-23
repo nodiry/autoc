@@ -1,4 +1,4 @@
-export const site: string = "http://localhost:3051/";
+export const site: string = "https://avalanch.uz/";
 export const siteConfig = {
   links: {
     signup: site + "auth/signup",
@@ -13,7 +13,7 @@ export const siteConfig = {
     dashboard: site + "dash/",
     sales: site + "sales/",
   },
-  ws: { chat: "ws://localhost:3051/chat" },
+  ws: { chat: "wss://avalanch.uz/chat" },
   uz: {
     last_modified: "Ohirgi o'zgarish vaqti: ",
     created: "Qo'shilish vaqti: ",
