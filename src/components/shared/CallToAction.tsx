@@ -17,7 +17,7 @@ const CallToAction = () => {
           >
             <h2 className="text-3xl font-bold text-white mb-4">Ready to Find Your Dream Car?</h2>
             <p className="text-xl text-blue-100">
-              Join thousands of satisfied customers across Uzbekistan who have found their perfect vehicle with AutoBozor.
+              Join thousands of satisfied customers across Uzbekistan who have found their perfect vehicle with Dream Auto.
             </p>
           </motion.div>
           <motion.div

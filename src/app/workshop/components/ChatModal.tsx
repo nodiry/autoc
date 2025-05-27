@@ -62,6 +62,7 @@ const ChatModal = ({
       sender: senderId,
       receiver: receiverId,
       content: input.trim(),
+      createdAt:new Date()
     };
     socket.emit("send", msg);
     setMessages((prev) => [...prev, msg]);

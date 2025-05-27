@@ -18,6 +18,7 @@ import FavoritesPage from "./app/favorites/favorite";
 import CarPage from "./app/cars/CarPage";
 import UserProfile from "./app/profile/page";
 import HistoryPage from "./app/history/page";
+import ChatMenuPage from "./app/chat/page";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -31,6 +32,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/profile" element={<UserProfile />} />
+          <Route path="/chat" element={<ChatMenuPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/workshop" element={<WorkShop />} />

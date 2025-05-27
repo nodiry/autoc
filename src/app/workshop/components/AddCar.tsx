@@ -55,6 +55,7 @@ export default function AddCarModal({
     specs: {
       color: "",
       transmission: "",
+      range:0,
       fuelType: "",
       bodyType: "",
       driveType: "",
@@ -247,10 +248,10 @@ export default function AddCarModal({
               min={0}
               max={1200}
               type="number"
-              placeholder="Fuel Efficiency (e.g. 18 km/l or 500 km)"
-              value={form.specs.fuelEfficiency}
+              placeholder="Car Range (e.g. 18 km/l or 500 km)"
+              value={form.specs.range}
               onChange={(e) =>
-                handleChange("specs.fuelEfficiency", e.target.value)
+                handleChange("specs.range", e.target.value)
               }
             />
           </div>

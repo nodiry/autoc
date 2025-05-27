@@ -10,6 +10,7 @@ import BuyCarModal from "./components/BuyButton";
 import Navbar from "@/components/shared/NavBar";
 import SignedNavBar from "@/components/shared/SignedNavBar";
 import ChatBox from "@/components/chatBox";
+import ContactDealerModal from "./components/Contact";
 
 interface Company {
   _id: string;
@@ -23,6 +24,7 @@ interface Company {
 const CarPage = () => {
   const { id } = useParams<{ id: string }>();
   const [user, setUser] = useState<any>(null);
+  const [dealer, setDealer] = useState<any>(null);
   const [car, setCar] = useState<Car | null>(null);
   const [company, setCompany] = useState<Company | null>(null);
   const [cars, setCars] = useState<Car[]>([]);
@@ -39,36 +41,21 @@ const CarPage = () => {
         setUser(parsedUser);
 
         // Fetch car
-        const carRes = await fetch(`${siteConfig.links.dashboard}cars/${id}`, {
+        const res = await fetch(`${siteConfig.links.dashboard}cars/${id}`, {
           method: "GET",
           credentials: "include",
         });
-        if (!carRes.ok) throw new Error("Failed to fetch car");
+        if (!res.ok) throw new Error("Failed to fetch car");
 
-        const { car: fetchedCar } = await carRes.json();
-        setCar(fetchedCar);
+        const data = await res.json();
+        setCompany(data.company);
+        setCar(data.car);
+        console.log(data.dealer);
+        setDealer(data.dealer);
+        setCars(data.cars);
 
-        // Set buyer flag if user is the buyer
-        if (parsedUser?._id && fetchedCar.buyer === parsedUser._id) {
+        if (parsedUser?._id && data.car.buyer === parsedUser._id)
           setIsBuyer(true);
-        }
-
-        // Fetch company
-        if (fetchedCar.company) {
-          const companyRes = await fetch(
-            siteConfig.links.org + fetchedCar.company,
-            {
-              method: "GET",
-              credentials: "include",
-            }
-          );
-          if (!companyRes.ok) throw new Error("Failed to fetch company");
-
-          const { company: fetchedCompany, cars: companyCars } =
-            await companyRes.json();
-          setCompany(fetchedCompany);
-          setCars(companyCars);
-        }
       } catch (err) {
         console.error("Error loading car page:", err);
       } finally {
@@ -82,9 +69,12 @@ const CarPage = () => {
   if (loading) return <div className="p-6 text-center">Loading...</div>;
   if (!car) return <div className="p-6 text-center">Car not found.</div>;
 
-  const chatEnabled = (car.status === "pending" && isBuyer) || (car.status === "completed" && isBuyer);
+  const chatEnabled =
+    (car.status === "pending" && isBuyer) ||
+    (car.status === "completed" && isBuyer);
 
-  const showBuyButton =car.status === "available" || (car.status === "rejected" && !isBuyer);
+  const showBuyButton =
+    car.status === "available" || (car.status === "cancelled" && !isBuyer);
 
   const buyButtonLabel = (() => {
     if (car.status === "available") return "Buy Now";
@@ -142,7 +132,7 @@ const CarPage = () => {
 
           {/* Buttons */}
           <div className="mt-4 space-x-4 flex flex-wrap">
-            <Button variant="default">Contact Dealer</Button>
+            {dealer && <ContactDealerModal dealer={dealer} />}
             <ChatBox
               carId={car._id}
               userId={user?._id || car.dealer}

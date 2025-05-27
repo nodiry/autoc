@@ -12,24 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { siteConfig } from "@/config/site";
-
-interface Dealer {
-  _id: string;
-  username: string;
-  firstname: string;
-  lastname: string;
-  age: number;
-  address: string;
-  phone: string;
-  email: string;
-  passportId?: string;
-  validated: boolean;
-  company: string;
-  settings: {
-    chatEnabled: boolean;
-    visible: boolean;
-  };
-}
+import { Dealer } from "@/type";
 
 interface Props {
   isOpen: boolean;
@@ -44,6 +27,7 @@ export default function UpdateDealerProfileModal({
 }: Props) {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
+    id: "",
     firstname: "",
     lastname: "",
     age: 18,
@@ -58,6 +42,7 @@ export default function UpdateDealerProfileModal({
   useEffect(() => {
     if (dealer) {
       setForm({
+        id: dealer._id,
         firstname: dealer.firstname,
         lastname: dealer.lastname,
         age: dealer.age || 18,
@@ -90,7 +75,7 @@ export default function UpdateDealerProfileModal({
     };
 
     try {
-      const res = await fetch(siteConfig.links.org + "dealer", {
+      const res = await fetch(siteConfig.links.authdealer, {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -101,7 +86,7 @@ export default function UpdateDealerProfileModal({
 
       const data = await res.json();
       localStorage.removeItem("user");
-      localStorage.setItem("user", JSON.stringify(data.dealer));
+      localStorage.setItem("user", JSON.stringify(data.user));
 
       toast.success("Profile updated");
       setIsOpen(false);

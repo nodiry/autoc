@@ -39,3 +39,21 @@ export interface Car {
   created?: number;
   modified?: number;
 }
+
+export interface Dealer {
+  _id: string;
+  username: string;
+  firstname: string;
+  lastname: string;
+  age: number;
+  address: string;
+  phone: string;
+  email: string;
+  passportId?: string;
+  validated: boolean;
+  company: string;
+  settings: {
+    chatEnabled: boolean;
+    visible: boolean;
+  };
+}

@@ -117,7 +117,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <a
-                  href="#"
+                  href="/contact"
                   className="hover:text-white transition duration-300"
                 >
                   Car Valuation
@@ -125,7 +125,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/contact"
                   className="hover:text-white transition duration-300"
                 >
                   Insurance Advice
@@ -133,18 +133,10 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/contact"
                   className="hover:text-white transition duration-300"
                 >
                   Dealer Support
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-white transition duration-300"
-                >
-                  Trade-in Offers
                 </a>
               </li>
             </ul>

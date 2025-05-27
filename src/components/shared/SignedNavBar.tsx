@@ -8,7 +8,8 @@ import { logout } from "@/lib/utils";
 
 const SignedNavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const user = JSON.parse(localStorage.getItem("user") || "");
+  const isDealer = user.company ? true : false;
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-50 w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,6 +49,21 @@ const SignedNavBar = () => {
               >
                 Profile
               </Link>
+              {isDealer ? (
+                <Link
+                  to="/workshop"
+                  className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                >
+                  Go back to wrokshop
+                </Link>
+              ) : (
+                <Link
+                  to="/chat"
+                  className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                >
+                  Messages
+                </Link>
+              )}
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
@@ -60,7 +76,7 @@ const SignedNavBar = () => {
             </Button>
           </div>
           <div className="flex items-center sm:hidden">
-            <button
+            <Button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
             >
@@ -69,7 +85,7 @@ const SignedNavBar = () => {
               ) : (
                 <Menu className="block h-6 w-6" />
               )}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

@@ -52,10 +52,10 @@ const Features = () => {
           className="text-center mb-16"
         >
           <h2 className="text-3xl font-bold text-gray-900">
-            Why Choose AutoBozor?
+            Why Choose Dream Auto?
           </h2>
           <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
-            We provide the best car buying and selling experience in Uzbekistan
+            We provide the best car buying experience in Uzbekistan
           </p>
         </motion.div>
 

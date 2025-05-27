@@ -64,6 +64,23 @@ const DealerCarCard = ({ car, companyId, onOpenChat }: Props) => {
     }
   };
 
+  async function handleDelete() {
+    setLoading(true);
+    try {
+      const res = await fetch(siteConfig.links.sales, {
+        method: "DELETE",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ carid: car._id, companyid: companyId }),
+      });
+      if (!res.ok) return toast.error("error happened while deleting the car");
+      setLoading(false);
+      window.location.reload();
+    } catch (error) {
+      toast.error("error happened : " + error);
+    }
+  }
+
   return (
     <Card className="w-full max-w-6xl mb-4 shadow-md">
       <CardContent className="flex flex-row items-center justify-between gap-6 p-4">
@@ -85,6 +102,14 @@ const DealerCarCard = ({ car, companyId, onOpenChat }: Props) => {
           <p className="text-sm text-muted-foreground">
             Color: {car.specs?.color || "N/A"}
           </p>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={loading}
+            onClick={handleDelete}
+          >
+            Delete Car
+          </Button>
         </div>
 
         {/* 3. Buyer + Dealer */}
@@ -106,7 +131,7 @@ const DealerCarCard = ({ car, companyId, onOpenChat }: Props) => {
             </p>
           )}
           {["pending", "completed"].includes(car.status) && (
-            <Button onClick={() => onOpenChat(car._id, car.buyer || '')}>
+            <Button onClick={() => onOpenChat(car._id, car.buyer || "")}>
               Open Chat
             </Button>
           )}
