@@ -83,9 +83,9 @@ const DealerCarCard = ({ car, companyId, onOpenChat }: Props) => {
 
   return (
     <Card className="w-full max-w-6xl mb-4 shadow-md">
-      <CardContent className="flex flex-row items-center justify-between gap-6 p-4">
-        {/* 1. Image */}
-        <div className="w-40 h-32 shrink-0 overflow-hidden rounded">
+      <CardContent className="flex flex-col p-4 gap-y-3">
+        {/* Image */}
+        <div className="w-full h-40 overflow-hidden rounded">
           <img
             src={site + car.images[0]}
             alt={car.make + " " + car.carmodel}
@@ -93,52 +93,45 @@ const DealerCarCard = ({ car, companyId, onOpenChat }: Props) => {
           />
         </div>
 
-        {/* 2. Car Info */}
-        <div className="flex-1 min-w-0 space-y-1">
-          <h2 className="text-base font-semibold truncate">
+        {/* Car Info */}
+        <div className="space-y-1">
+          <h2 className="text-base font-semibold">
             {car.make} {car.carmodel}
           </h2>
           <p className="text-sm text-muted-foreground">${car.price}</p>
           <p className="text-sm text-muted-foreground">
             Color: {car.specs?.color || "N/A"}
           </p>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={loading}
-            onClick={handleDelete}
-          >
-            Delete Car
-          </Button>
         </div>
 
-        {/* 3. Buyer + Dealer */}
-        <div className="flex-1 min-w-0 space-y-1">
-          {(car.status == "pending" || car.status == "completed") &&
+        {/* Buyer and Dealer Info */}
+        <div className="space-y-1 text-sm">
+          {(car.status === "pending" || car.status === "completed") &&
           car.buyer ? (
             <>
-              <p className="text-sm truncate">
-                Buyer:{" "}
-                <span className="font-medium text-black">{buyerName}</span>
+              <p>
+                <span className="font-medium">Buyer:</span> {buyerName}
               </p>
-              <p className="text-sm truncate">
-                Dealer: <span className="font-medium">{dealerName}</span>
+              <p>
+                <span className="font-medium">Dealer:</span> {dealerName}
               </p>
+              <Button
+                size="sm"
+                className="w-full"
+                onClick={() => onOpenChat(car._id, car.buyer || "")}
+              >
+                Open Chat
+              </Button>
             </>
           ) : (
-            <p className="text-sm text-muted-foreground italic">
-              No buyer info
-            </p>
-          )}
-          {["pending", "completed"].includes(car.status) && (
-            <Button onClick={() => onOpenChat(car._id, car.buyer || "")}>
-              Open Chat
-            </Button>
+            <p className="italic text-muted-foreground">No buyer info</p>
           )}
         </div>
 
-        {/* 4. Actions + Date */}
-        <div className="flex flex-col gap-2 items-end text-right shrink-0">
+        {/* Status + Actions */}
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-semibold">Status: {car.status}</p>
+
           {car.status === "pending" && car.buyer && (
             <div className="flex gap-2">
               <Button
@@ -159,7 +152,17 @@ const DealerCarCard = ({ car, companyId, onOpenChat }: Props) => {
               </Button>
             </div>
           )}
-          <p className="text-xs text-muted-foreground">
+
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={loading}
+            onClick={handleDelete}
+          >
+            Delete Car
+          </Button>
+
+          <p className="text-xs text-muted-foreground text-right">
             Created {formatDistanceToNow(new Date(car.created || 0))} ago
           </p>
         </div>

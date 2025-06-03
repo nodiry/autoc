@@ -82,16 +82,67 @@ const WorkShop = () => {
           {cars.length === 0 ? (
             <p className="text-sm text-gray-500">cars list is empty</p>
           ) : (
-            cars.map((car, i) => (
-              <DealerCarCard
-                key={car._id || i}
-                car={car}
-                companyId={user.company}
-                onOpenChat={() =>
-                  setActiveChat({ carId: car._id, buyerId: car.buyer })
-                }
-              />
-            ))
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+              {/* Column 1: Available or Cancelled */}
+              <div>
+                <h4 className="text-center font-medium text-sm text-gray-600 mb-2">
+                  Available / Cancelled
+                </h4>
+                {cars
+                  .filter(
+                    (car) =>
+                      car.status === "available" || car.status === "cancelled",
+                  )
+                  .map((car, i) => (
+                    <DealerCarCard
+                      key={car._id || i}
+                      car={car}
+                      companyId={user.company}
+                      onOpenChat={() =>
+                        setActiveChat({ carId: car._id, buyerId: car.buyer })
+                      }
+                    />
+                  ))}
+              </div>
+
+              {/* Column 2: Pending */}
+              <div>
+                <h4 className="text-center font-medium text-sm text-gray-600 mb-2">
+                  Pending
+                </h4>
+                {cars
+                  .filter((car) => car.status === "pending")
+                  .map((car, i) => (
+                    <DealerCarCard
+                      key={car._id || i}
+                      car={car}
+                      companyId={user.company}
+                      onOpenChat={() =>
+                        setActiveChat({ carId: car._id, buyerId: car.buyer })
+                      }
+                    />
+                  ))}
+              </div>
+
+              {/* Column 3: Completed */}
+              <div>
+                <h4 className="text-center font-medium text-sm text-gray-600 mb-2">
+                  Completed
+                </h4>
+                {cars
+                  .filter((car) => car.status === "completed")
+                  .map((car, i) => (
+                    <DealerCarCard
+                      key={car._id || i}
+                      car={car}
+                      companyId={user.company}
+                      onOpenChat={() =>
+                        setActiveChat({ carId: car._id, buyerId: car.buyer })
+                      }
+                    />
+                  ))}
+              </div>
+            </div>
           )}
         </div>
       </div>
